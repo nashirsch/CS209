@@ -200,13 +200,17 @@ public class DisplayObject {
 			 * (rotation, etc.)
 			 */
 			Graphics2D g2d = (Graphics2D) g;
+
+			//g2d.translate(this.pivotPoint.x, this.pivotPoint.y);
+			//g2d.translate(-1 * this.pivotPoint.x, -1 * this.pivotPoint.y);
+
 			applyTransformations(g2d);
 
 			/* Actually draw the image, perform the pivot point translation here */
 			g2d.drawImage(displayImage, 0, 0,
 					(int) (getUnscaledWidth()),
 					(int) (getUnscaledHeight()), null);
-			
+
 			/*
 			 * undo the transformations so this doesn't affect other display
 			 * objects
@@ -221,7 +225,7 @@ public class DisplayObject {
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
 		g2d.translate(this.position.x, this.position.y);
-		g2d.rotate(Math.toRadians(this.getRotation()));
+		g2d.rotate(Math.toRadians(this.getRotation()), this.getPivotPoint().x, this.getPivotPoint().y);
 		g2d.scale(this.scaleX, this.scaleY);
 		float curAlpha;
 		this.oldAlpha = curAlpha = ((AlphaComposite) g2d.getComposite()).getAlpha();
@@ -234,7 +238,7 @@ public class DisplayObject {
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
 		g2d.translate(-1 * this.position.x, -1 * this.position.y);
-		g2d.rotate(Math.toRadians(-1 * this.getRotation()));
+		g2d.rotate(-1 * Math.toRadians(this.getRotation()), this.getPivotPoint().x, this.getPivotPoint().y);
 		g2d.scale(1 / this.scaleX, 1 / this.scaleY);
 		g2d.setComposite(AlphaComposite.getInstance(3, this.oldAlpha));
 	}
