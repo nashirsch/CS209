@@ -81,6 +81,14 @@ public class LabOneGame extends Game{
 			mario.setScaleY(mario.getScaleY() + 0.01);
 		}
 
+		/* Rotation changes */
+		if (pressedKeys.contains(KeyEvent.VK_W)){
+			mario.setRotation(mario.getRotation() + 0.3);
+		}
+		if (pressedKeys.contains(KeyEvent.VK_Q)){
+			mario.setRotation(mario.getRotation() - 0.3);
+		}
+
 
 		
 		/* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
