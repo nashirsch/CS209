@@ -3,6 +3,8 @@ package edu.virginia.engine.display;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Point;
+import java.awt.AlphaComposite;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,17 +23,50 @@ public class DisplayObject {
 	/* The image that is displayed by this object */
 	private BufferedImage displayImage;
 
+	private Point position;
+
+	private Point pivotPoint;
+
+	private double Rotation;
+
+	private boolean visible;
+
+	private float alpha;
+
+	private float oldAlpha;
+
+	private double scaleX;
+
+	private double scaleY;
+
 	/**
 	 * Constructors: can pass in the id OR the id and image's file path and
 	 * position OR the id and a buffered image and position
 	 */
 	public DisplayObject(String id) {
 		this.setId(id);
+		this.position = new Point(0,0);
+		this.pivotPoint = new Point(0,0);
+		this.Rotation = 0;
+		this.visible = true;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scaleX = 1.0;
+		this.scaleY = 1.0;
+
 	}
 
 	public DisplayObject(String id, String fileName) {
 		this.setId(id);
 		this.setImage(fileName);
+		this.position = new Point(0,0);
+		this.pivotPoint = new Point(0,0);
+		this.Rotation = 0;
+		this.visible = true;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scaleX = 1.0;
+		this.scaleY = 1.0;
 	}
 
 	public void setId(String id) {
@@ -42,6 +77,55 @@ public class DisplayObject {
 		return id;
 	}
 
+	public Point getPosition() { return position; }
+
+	public void setPosition(Point position) { this.position = position; }
+
+	public Point getPivotPoint() { return pivotPoint; }
+
+	public void setPivotPoint(Point pivotPoint) { this.pivotPoint = pivotPoint; }
+
+	public double getRotation() { return Rotation; }
+
+	public void setRotation(double rotation) { Rotation = rotation; }
+
+	public boolean isVisible() { return visible; }
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public float getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+
+	public float getOldAlpha() {
+		return oldAlpha;
+	}
+
+	public void setOldAlpha(float oldAlpha) {
+		this.oldAlpha = oldAlpha;
+	}
+
+	public double getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(double scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public double getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(double scaleY) {
+		this.scaleY = scaleY;
+	}
 
 	/**
 	 * Returns the unscaled width and height of this display object
@@ -109,7 +193,7 @@ public class DisplayObject {
 	 * */
 	public void draw(Graphics g) {
 		
-		if (displayImage != null) {
+		if (displayImage != null && this.visible) {
 			
 			/*
 			 * Get the graphics and apply this objects transformations
@@ -136,7 +220,12 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
-	
+		g2d.translate(this.position.x, this.position.y);
+		g2d.rotate(Math.toRadians(this.getRotation()));
+		g2d.scale(this.scaleX, this.scaleY);
+		float curAlpha;
+		this.oldAlpha = curAlpha = ((AlphaComposite) g2d.getComposite()).getAlpha();
+		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha * this.alpha));
 	}
 
 	/**
@@ -144,7 +233,10 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
-
+		g2d.translate(-1 * this.position.x, -1 * this.position.y);
+		g2d.rotate(Math.toRadians(-1 * this.getRotation()));
+		g2d.scale(1 / this.scaleX, 1 / this.scaleY);
+		g2d.setComposite(AlphaComposite.getInstance(3, this.oldAlpha));
 	}
 
 }

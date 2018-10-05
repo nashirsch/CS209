@@ -1,6 +1,8 @@
 package edu.virginia.lab1test;
 
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import edu.virginia.engine.display.Game;
@@ -29,6 +31,57 @@ public class LabOneGame extends Game{
 	@Override
 	public void update(ArrayList<Integer> pressedKeys){
 		super.update(pressedKeys);
+
+		/* Arrow key movements (U, D, L, R) for Mario */
+		if (pressedKeys.contains(KeyEvent.VK_UP)){
+			mario.setPosition(new Point(mario.getPosition().x, mario.getPosition().y - 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_DOWN)){
+			mario.setPosition(new Point(mario.getPosition().x, mario.getPosition().y + 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_LEFT)){
+			mario.setPosition(new Point(mario.getPosition().x - 5, mario.getPosition().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_RIGHT)){
+			mario.setPosition(new Point(mario.getPosition().x + 5, mario.getPosition().y));
+		}
+
+		/* Pivot point movements (I, J, K, L) for Mario */
+		if (pressedKeys.contains(KeyEvent.VK_I)){
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x, mario.getPivotPoint().y - 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_K)){
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x, mario.getPivotPoint().y + 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_J)){
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x - 5, mario.getPivotPoint().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_L)){
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x + 5, mario.getPivotPoint().y));
+		}
+
+		/* Visibility and alpha changes */
+		if (pressedKeys.contains(KeyEvent.VK_V)){
+			mario.setVisible( !mario.isVisible() );
+		}
+		if (pressedKeys.contains(KeyEvent.VK_Z) && mario.getAlpha() > 0.01f){
+			mario.setAlpha(mario.getAlpha() - 0.01f);
+		}
+		if (pressedKeys.contains(KeyEvent.VK_X) && mario.getAlpha() < 1.0f){
+			mario.setAlpha(mario.getAlpha() + 0.01f);
+		}
+
+		/* Scale changes */
+		if (pressedKeys.contains(KeyEvent.VK_A) && mario.getScaleX() > 0){
+			mario.setScaleX(mario.getScaleX() - 0.01);
+			mario.setScaleY(mario.getScaleY() - 0.01);
+		}
+		if (pressedKeys.contains(KeyEvent.VK_S)){
+			mario.setScaleX(mario.getScaleX() + 0.01);
+			mario.setScaleY(mario.getScaleY() + 0.01);
+		}
+
+
 		
 		/* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
 		if(mario != null) mario.update(pressedKeys);
