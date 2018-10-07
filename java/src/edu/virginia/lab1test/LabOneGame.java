@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import java.util.concurrent.TimeUnit;
+
 import edu.virginia.engine.display.Game;
 import edu.virginia.engine.display.Sprite;
 
@@ -46,12 +48,12 @@ public class LabOneGame extends Game{
 			mario.setPosition(new Point(mario.getPosition().x + 5, mario.getPosition().y));
 		}
 
-		/* Pivot point movements (I, J, K, L) for Mario */
+		/* Pivot point movements (I (up), J (left), K (down), L (right)) for Mario */
 		if (pressedKeys.contains(KeyEvent.VK_I)){
 			mario.setPivotPoint(new Point(mario.getPivotPoint().x, mario.getPivotPoint().y - 5));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_K)){
-			mario.setPivotPoint(new Point(mario.getPivotPoint().x, mario.getPivotPoint().y + 5));
+				mario.setPivotPoint(new Point(mario.getPivotPoint().x, mario.getPivotPoint().y + 5));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_J)){
 			mario.setPivotPoint(new Point(mario.getPivotPoint().x - 5, mario.getPivotPoint().y));
@@ -62,7 +64,15 @@ public class LabOneGame extends Game{
 
 		/* Visibility and alpha changes */
 		if (pressedKeys.contains(KeyEvent.VK_V)){
-			mario.setVisible( !mario.isVisible() );
+            try
+            {
+                mario.setVisible( !mario.isVisible());
+                Thread.sleep(200);
+            }
+            catch(InterruptedException ex)
+            {
+//                mario.setVisible( !mario.isVisible());
+            }
 		}
 		if (pressedKeys.contains(KeyEvent.VK_Z) && mario.getAlpha() > 0.01f){
 			mario.setAlpha(mario.getAlpha() - 0.01f);
