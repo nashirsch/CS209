@@ -34,6 +34,7 @@ public class AnimatedSprite extends Sprite {
         super(id, filename);
         super.setPosition(position);
 
+        this.animationSpeed = DEFAULT_ANIMATION_SPEED;
         this.gameClock = new GameClock();
     }
 
