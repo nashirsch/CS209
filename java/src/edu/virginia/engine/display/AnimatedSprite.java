@@ -1,7 +1,7 @@
 package edu.virginia.engine.display;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.io.File;
 
@@ -10,7 +10,7 @@ import edu.virginia.engine.util.GameClock;
 
 public class AnimatedSprite extends Sprite {
 
-    private ArrayList<animation> animations;
+    private ArrayList<Animation> animations;
 
     private boolean playing;
 
@@ -34,6 +34,8 @@ public class AnimatedSprite extends Sprite {
         super(id, filename);
         super.setPosition(position);
 
+        /* load all animation frames to arraylist frames in order: standing, right, left */
+
         this.animationSpeed = DEFAULT_ANIMATION_SPEED;
         this.gameClock = new GameClock();
     }
@@ -43,4 +45,24 @@ public class AnimatedSprite extends Sprite {
             this.gameClock = new GameClock();
         }
     }
+
+    public void setAnimationSpeed(int animationSpeed) { this.animationSpeed = animationSpeed; }
+
+    public void setAnimations() {
+
+        this.animations = new ArrayList<Animation>;
+        this.animations.add(new Animation("standing", 0, 0));
+        this.animations.add(new Animation("right", 1, 4));
+        this.animations.add(new Animation("standing", 5, 8));
+
+    }
+
+    public void draw(Graphics g) {
+
+        //mess with clock stuff also
+        super.setImage(frames.get(currentFrame));
+        super.draw(g);
+
+    }
+
 }
