@@ -90,7 +90,6 @@ public class LabOneGame extends Game{
 			mario.setScaleX(mario.getScaleX() + 0.01);
 			mario.setScaleY(mario.getScaleY() + 0.01);
 		}
-
 		/* Rotation changes */
 		if (pressedKeys.contains(KeyEvent.VK_W)){
 			mario.setRotation(mario.getRotation() + 0.3);
