@@ -5,10 +5,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import java.util.concurrent.TimeUnit;
-
 import edu.virginia.engine.display.Game;
-import edu.virginia.engine.display.Sprite;
+import edu.virginia.engine.display.AnimatedSprite;
 
 /**
  * Example game that utilizes our engine. We can create a simple prototype game with just a couple lines of code
@@ -17,13 +15,13 @@ import edu.virginia.engine.display.Sprite;
 public class LabOneGame extends Game{
 
 	/* Create a sprite object for our game. We'll use mario */
-	Sprite mario = new Sprite("Mario", "Mario.png");
+	AnimatedSprite mario = new AnimatedSprite("Mario", new Point(0, 0));
 	
 	/**
 	 * Constructor. See constructor in Game.java for details on the parameters given
 	 * */
 	public LabOneGame() {
-		super("Lab One Test Game", 500, 300);
+		super("Lab One Test Game", 1000, 600);
 	}
 	
 	/**
@@ -43,9 +41,11 @@ public class LabOneGame extends Game{
 		}
 		if (pressedKeys.contains(KeyEvent.VK_LEFT)){
 			mario.setPosition(new Point(mario.getPosition().x - 5, mario.getPosition().y));
+			mario.animate("left");
 		}
 		if (pressedKeys.contains(KeyEvent.VK_RIGHT)){
 			mario.setPosition(new Point(mario.getPosition().x + 5, mario.getPosition().y));
+			mario.animate("right");
 		}
 
 		/* Pivot point movements (I (up), J (left), K (down), L (right)) for Mario */
@@ -71,7 +71,7 @@ public class LabOneGame extends Game{
             }
             catch(InterruptedException ex)
             {
-//                mario.setVisible( !mario.isVisible());
+                 //mario.setVisible( !mario.isVisible());
             }
 		}
 		if (pressedKeys.contains(KeyEvent.VK_Z) && mario.getAlpha() > 0.01f){
@@ -98,7 +98,9 @@ public class LabOneGame extends Game{
 			mario.setRotation(mario.getRotation() - 0.3);
 		}
 
-
+		if (pressedKeys.size() == 0){
+			mario.animate("standing");
+		}
 		
 		/* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
 		if(mario != null) mario.update(pressedKeys);

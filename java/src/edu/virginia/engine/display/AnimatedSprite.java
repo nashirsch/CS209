@@ -1,9 +1,9 @@
 package edu.virginia.engine.display;
 
+import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.io.File;
 
 import edu.virginia.engine.util.GameClock;
 
@@ -28,13 +28,17 @@ public class AnimatedSprite extends Sprite {
 
     private int animationSpeed;
 
-    static final int DEFAULT_ANIMATION_SPEED = 0;
+    static final int DEFAULT_ANIMATION_SPEED = 400;
 
-    public AnimatedSprite(String id, String filename, Point position) {
-        super(id, filename);
+    public AnimatedSprite(String id, Point position) {
+        super(id);
         super.setPosition(position);
 
-        /* load all animation frames to arraylist frames in order: standing, right, left */
+        this.currentFrame = 0;
+
+        /* load all frames to arraylist frames in order: standing, right, left */
+        this.setFrames();
+        this.setAnimations();
 
         this.animationSpeed = DEFAULT_ANIMATION_SPEED;
         this.gameClock = new GameClock();
@@ -46,21 +50,70 @@ public class AnimatedSprite extends Sprite {
         }
     }
 
+    public void setFrames() {
+        this.frames = new ArrayList<BufferedImage>();
+        frames.add(readImage("frames/mario_stand_0.png"));
+        frames.add(readImage("frames/mario_right_1.png"));
+        frames.add(readImage("frames/mario_right_2.png"));
+        frames.add(readImage("frames/mario_right_3.png"));
+        frames.add(readImage("frames/mario_right_4.png"));
+        frames.add(readImage("frames/mario_left_5.png"));
+        frames.add(readImage("frames/mario_left_6.png"));
+        frames.add(readImage("frames/mario_left_7.png"));
+        frames.add(readImage("frames/mario_left_8.png"));
+    }
+
     public void setAnimationSpeed(int animationSpeed) { this.animationSpeed = animationSpeed; }
 
     public void setAnimations() {
 
-        this.animations = new ArrayList<Animation>;
+        this.animations = new ArrayList<Animation>();
         this.animations.add(new Animation("standing", 0, 0));
         this.animations.add(new Animation("right", 1, 4));
-        this.animations.add(new Animation("standing", 5, 8));
+        this.animations.add(new Animation("left", 5, 8));
 
+    }
+
+    public Animation getAnimation(String id){
+        for (int i = 0; i < frames.size(); i++){
+            if (this.animations.get(i).getId() == id) {
+                return this.animations.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void animate(Animation a){
+        this.startFrame = a.getStartFrame();
+        this.endFrame = a.getEndFrame();
+    }
+
+    public void animate(String id){
+        this.startFrame = this.getAnimation(id).getStartFrame();
+        this.endFrame = this.getAnimation(id).getEndFrame();
+    }
+
+    public void animate(int start, int end){
+        this.startFrame = start;
+        this.endFrame = end;
     }
 
     public void draw(Graphics g) {
 
         //mess with clock stuff also
         super.setImage(frames.get(currentFrame));
+
+        if(gameClock.getElapsedTime() >= animationSpeed){
+
+            currentFrame++;
+            if(currentFrame > endFrame || currentFrame < startFrame){
+                currentFrame = startFrame;
+            }
+
+            gameClock.resetGameClock();
+        }
+
+
         super.draw(g);
 
     }
