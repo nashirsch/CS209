@@ -1,0 +1,11 @@
+---
+title: "Learning Content"
+output: html_notebook
+author: "Jason Vallee, Noah Hirsch"
+---
+
+
+We will begin assuming the child playing this game at at a third grade level in mathematics. So, the target user will have familiarity with addition, subtraction, and basic multiplication. The end goal is that they will strengthen these skills and understand the concept of remainder or the mod of a number.The game is called space racer and the player is in control of a spaceship of class k. The student must traverse a map, which is pretty linear, but the conflict is their spaceship will runout of energy unless they go through certain charging gates. Each charging gate is of type n. Depending on the level, the student must go through a gate that is a multiple of k, or gives you some remainder r when divided by k. Also, the student can change the number of the gate by firing and hitting the gate with their laser.  
+
+
+Level 1:
