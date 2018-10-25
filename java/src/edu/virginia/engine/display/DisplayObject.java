@@ -20,6 +20,8 @@ public class DisplayObject {
 	/* All DisplayObject have a unique id */
 	private String id;
 
+	private DisplayObject parent;
+
 	/* The image that is displayed by this object */
 	private BufferedImage displayImage;
 
@@ -43,6 +45,19 @@ public class DisplayObject {
 	 * Constructors: can pass in the id OR the id and image's file path and
 	 * position OR the id and a buffered image and position
 	 */
+
+	public DisplayObject(){
+		this.position = new Point(0,0);
+		this.pivotPoint = new Point(0,0);
+		this.Rotation = 0;
+		this.visible = true;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scaleX = 1.0;
+		this.scaleY = 1.0;
+		this.parent = null;
+	}
+
 	public DisplayObject(String id) {
 		this.setId(id);
 		this.position = new Point(0,0);
@@ -53,7 +68,7 @@ public class DisplayObject {
 		this.oldAlpha = 0.0f;
 		this.scaleX = 1.0;
 		this.scaleY = 1.0;
-
+		this.parent = null;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -67,6 +82,7 @@ public class DisplayObject {
 		this.oldAlpha = 0.0f;
 		this.scaleX = 1.0;
 		this.scaleY = 1.0;
+		this.parent = null;
 	}
 
 	public void setId(String id) {
@@ -76,6 +92,10 @@ public class DisplayObject {
 	public String getId() {
 		return id;
 	}
+
+	public DisplayObject getParent() { return parent; }
+
+	public void setParent(DisplayObject parent) { this.parent = parent; }
 
 	public Point getPosition() { return position; }
 
@@ -138,6 +158,26 @@ public class DisplayObject {
 	public int getUnscaledHeight() {
 		if(displayImage == null) return 0;
 		return displayImage.getHeight();
+	}
+
+	public Point localToGlobal(Point p){
+		DisplayObject d = this;
+		while(d != null){
+			p.x += d.getPosition().getX();
+			p.y += d.getPosition().getY();
+			d = d.getParent();
+		}
+		return(p);
+	}
+
+	public Point globalToLocal(Point p){
+		DisplayObject d = this;
+		while(d != null){
+			p.x -= d.getPosition().getX();
+			p.y -= d.getPosition().getY();
+			d = d.getParent();
+		}
+		return(p);
 	}
 
 	public BufferedImage getDisplayImage() {

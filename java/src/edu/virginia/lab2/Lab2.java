@@ -94,12 +94,21 @@ public class Lab2 extends Game{
 			mario.setScaleX(mario.getScaleX() + 0.01);
 			mario.setScaleY(mario.getScaleY() + 0.01);
 		}
+
 		/* Rotation changes */
 		if (pressedKeys.contains(KeyEvent.VK_W)){
 			mario.setRotation(mario.getRotation() + 0.3);
 		}
 		if (pressedKeys.contains(KeyEvent.VK_Q)){
 			mario.setRotation(mario.getRotation() - 0.3);
+		}
+
+		/* Animation speed changes */
+		if (pressedKeys.contains(KeyEvent.VK_G)){
+			if(mario.getAnimationSpeed() > 15){ mario.setAnimationSpeed(mario.getAnimationSpeed() - 10); }
+		}
+		if (pressedKeys.contains(KeyEvent.VK_F)){
+			if(mario.getAnimationSpeed() < 2000){ mario.setAnimationSpeed(mario.getAnimationSpeed() + 10); }
 		}
 
 		mario.animate(currentAnimation);

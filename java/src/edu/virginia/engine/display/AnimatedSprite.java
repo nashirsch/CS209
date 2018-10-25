@@ -28,7 +28,7 @@ public class AnimatedSprite extends Sprite {
 
     private int animationSpeed;
 
-    static final int DEFAULT_ANIMATION_SPEED = 400;
+    static final int DEFAULT_ANIMATION_SPEED = 110;
 
     public AnimatedSprite(String id, Point position) {
         super(id);
@@ -61,9 +61,16 @@ public class AnimatedSprite extends Sprite {
         frames.add(readImage("frames/mario_left_6.png"));
         frames.add(readImage("frames/mario_left_7.png"));
         frames.add(readImage("frames/mario_left_8.png"));
+        frames.add(readImage("frames/mario_down_9.png"));
+        frames.add(readImage("frames/mario_down_10.png"));
+        frames.add(readImage("frames/mario_up_11.png"));
+        frames.add(readImage("frames/mario_up_12.png"));
     }
 
     public void setAnimationSpeed(int animationSpeed) { this.animationSpeed = animationSpeed; }
+
+    public int getAnimationSpeed() { return animationSpeed; }
+
 
     public void setAnimations() {
 
@@ -71,6 +78,8 @@ public class AnimatedSprite extends Sprite {
         this.animations.add(new Animation("standing", 0, 0));
         this.animations.add(new Animation("right", 1, 4));
         this.animations.add(new Animation("left", 5, 8));
+        this.animations.add(new Animation("down", 9, 10));
+        this.animations.add(new Animation("up", 11, 12));
 
     }
 
