@@ -1,7 +1,6 @@
 package edu.virginia.lab2;
 
 import edu.virginia.engine.display.AnimatedSprite;
-import edu.virginia.engine.display.Animation;
 import edu.virginia.engine.display.Game;
 
 import java.awt.*;

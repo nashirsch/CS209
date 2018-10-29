@@ -9,10 +9,14 @@ public class DisplayObjectContainer extends DisplayObject{
 
     public DisplayObjectContainer(){ displayChilden = new ArrayList<DisplayObject>(); }
 
-    public DisplayObjectContainer(String gameId){ super(gameId); }
+    public DisplayObjectContainer(String gameId){
+        super(gameId);
+        displayChilden = new ArrayList<DisplayObject>();
+    }
 
     public DisplayObjectContainer(String id, String imageFileName) {
         super(id, imageFileName);
+        displayChilden = new ArrayList<DisplayObject>();
     }
 
     public void addChild(DisplayObject child){
@@ -44,12 +48,13 @@ public class DisplayObjectContainer extends DisplayObject{
     public void draw(Graphics g){
         super.draw(g);
 
-        applyTransformations((Graphics2D) g);
+        Graphics2D g2d = (Graphics2D) g;
+        applyTransformations(g2d);
 
         for(DisplayObject i : displayChilden){
             i.draw(g);
         }
 
-        reverseTransformations((Graphics2D) g);
+        reverseTransformations(g2d);
     }
 }
