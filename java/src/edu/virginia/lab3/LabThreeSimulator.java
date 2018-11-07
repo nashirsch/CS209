@@ -1,6 +1,5 @@
 package edu.virginia.lab3;
 
-import edu.virginia.engine.display.AnimatedSprite;
 import edu.virginia.engine.display.DisplayObject;
 import edu.virginia.engine.display.DisplayObjectContainer;
 import edu.virginia.engine.display.Game;
@@ -35,25 +34,25 @@ public class LabThreeSimulator extends Game {
 
         earth = new DisplayObjectContainer("earth", "solar/earth.png");
         sun.addChild(earth);
-        earth.setPosition(new Point(400, 400));
-        earth.setScaleX(0.5);
-        earth.setScaleY(0.5);
-        earth.setPivotPoint(new Point(-2 * earth.getPosition().x + 350, -2 * earth.getPosition().y + 350));
+        earth.setPosition(new Point(200, 200));
+        earth.setScaleX(0.3);
+        earth.setScaleY(0.3);
+        earth.setPivotPoint(new Point(-1 * earth.getPosition().x, -1 * earth.getPosition().y));
 
 
         uranus = new DisplayObjectContainer("uranus", "solar/uranus.png");
         sun.addChild(uranus);
-        uranus.setPosition(new Point(-500, -500));
-        uranus.setScaleX(0.5);
-        uranus.setScaleY(0.5);
-        uranus.setPivotPoint(new Point(-2 * uranus.getPosition().x + 350, -2 * uranus.getPosition().y + 350));
+        uranus.setPosition(new Point(-400, -400));
+        uranus.setScaleX(0.3);
+        uranus.setScaleY(0.3);
+        uranus.setPivotPoint(new Point(-1 * uranus.getPosition().x, -1 * uranus.getPosition().y));
 
         moon = new DisplayObject("moon", "solar/moon.png");
         earth.addChild(moon);
-        moon.setPosition(new Point(400, 400));
-        moon.setScaleX(0.5);
-        moon.setScaleY(0.5);
-        moon.setPivotPoint(new Point(-2 * earth.getPosition().x + 350, -2 * earth.getPosition().y + 350));
+        moon.setPosition(new Point(50, 50));
+        moon.setScaleX(0.1);
+        moon.setScaleY(0.1);
+        moon.setPivotPoint(new Point(-1 * moon.getPosition().x, -1 * moon.getPosition().y));
     }
 
     /**
@@ -80,19 +79,8 @@ public class LabThreeSimulator extends Game {
         if (pressedKeys.contains(KeyEvent.VK_LEFT)){
             sun.getPosition().translate(-10, 0);
         }
-        if (pressedKeys.contains(KeyEvent.VK_RIGHT)){
+        if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
             sun.getPosition().translate(10, 0);
-        }
-
-        if (pressedKeys.contains(KeyEvent.VK_Q)){
-            sun.setScaleX(sun.getScaleX() + 0.01);
-            sun.setScaleY(sun.getScaleY() + 0.01);
-        }
-        if (pressedKeys.contains(KeyEvent.VK_W)){
-            if(sun.getScaleX() >= 0.03){
-                sun.setScaleX(sun.getScaleX() - 0.01);
-                sun.setScaleY(sun.getScaleY() - 0.01);
-            }
         }
 
         earth.setRotation(earth.getRotation() + 1.4 * spinDirection);

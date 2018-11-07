@@ -1,10 +1,8 @@
 package edu.virginia.engine.display;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.Point;
-import java.awt.AlphaComposite;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +26,10 @@ public class DisplayObject {
 	private Point position;
 
 	private Point pivotPoint;
+
+	private Shape hitbox;
+
+	private AffineTransform transform;
 
 	private double Rotation;
 
@@ -56,6 +58,8 @@ public class DisplayObject {
 		this.scaleX = 1.0;
 		this.scaleY = 1.0;
 		this.parent = null;
+		this.hitbox = new Rectangle(0, 0, 1, 1);
+		this.transform = new AffineTransform();
 	}
 
 	public DisplayObject(String id) {
@@ -69,6 +73,8 @@ public class DisplayObject {
 		this.scaleX = 1.0;
 		this.scaleY = 1.0;
 		this.parent = null;
+		this.hitbox = new Rectangle(0, 0, 1, 1);
+		this.transform = new AffineTransform();
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -83,6 +89,8 @@ public class DisplayObject {
 		this.scaleX = 1.0;
 		this.scaleY = 1.0;
 		this.parent = null;
+		this.hitbox = new Rectangle(0, 0, 1, 1);
+		this.transform = new AffineTransform();
 	}
 
 	public void setId(String id) {
@@ -180,6 +188,13 @@ public class DisplayObject {
 		return(p);
 	}
 
+	public Shape getHitbox(){ return(this.hitbox); }
+
+	public boolean collidesWith(DisplayObject other){
+		Shape h = other.getHitbox();
+		return this.hitbox.intersects(h.getBounds());
+	}
+
 	public BufferedImage getDisplayImage() {
 		return this.displayImage;
 	}
@@ -222,8 +237,13 @@ public class DisplayObject {
 	 * objects state before the draw occurs. Should be overridden if necessary
 	 * to update objects appropriately.
 	 * */
-	protected void update(ArrayList<Integer> pressedKeys) {
-		
+	public void update(ArrayList<Integer> pressedKeys) {
+		this.transform.setToIdentity();
+		this.transform.translate(this.localToGlobal(new Point(0, 0)).x, this.localToGlobal(new Point(0, 0)).y);
+		this.transform.rotate(Math.toRadians(this.getRotation()), this.pivotPoint.x, this.pivotPoint.y);
+		this.transform.scale(this.scaleX, this.scaleY);
+		this.hitbox = new Rectangle(0, 0, this.getUnscaledWidth(), this.getUnscaledHeight());
+		this.hitbox = this.transform.createTransformedShape(this.hitbox);
 	}
 
 	/**
@@ -257,6 +277,7 @@ public class DisplayObject {
 			 */
 			reverseTransformations(g2d);
 		}
+
 	}
 
 	/**
@@ -265,8 +286,8 @@ public class DisplayObject {
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
 		g2d.translate(this.position.x, this.position.y);
-		g2d.scale(this.scaleX, this.scaleY);
 		g2d.rotate(Math.toRadians(this.getRotation()), this.getPivotPoint().x, this.getPivotPoint().y);
+		g2d.scale(this.scaleX, this.scaleY);
 		float curAlpha;
 		this.oldAlpha = curAlpha = ((AlphaComposite) g2d.getComposite()).getAlpha();
 		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha * this.alpha));
@@ -278,8 +299,8 @@ public class DisplayObject {
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
 		g2d.setComposite(AlphaComposite.getInstance(3, this.oldAlpha));
-		g2d.rotate(-1 * Math.toRadians(this.getRotation()), this.getPivotPoint().x, this.getPivotPoint().y);
 		g2d.scale(1 / this.scaleX, 1 / this.scaleY);
+		g2d.rotate(-1 * Math.toRadians(this.getRotation()), this.getPivotPoint().x, this.getPivotPoint().y);
 		g2d.translate(-1 * this.position.x, -1 * this.position.y);
 	}
 

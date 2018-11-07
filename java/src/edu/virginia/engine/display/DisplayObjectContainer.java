@@ -50,11 +50,13 @@ public class DisplayObjectContainer extends DisplayObject{
 
         Graphics2D g2d = (Graphics2D) g;
         applyTransformations(g2d);
+        g2d.scale(1 / this.getScaleX(), 1 / this.getScaleY());
 
         for(DisplayObject i : displayChilden){
             i.draw(g);
         }
 
+        g2d.scale(this.getScaleX(), this.getScaleY());
         reverseTransformations(g2d);
     }
 }
