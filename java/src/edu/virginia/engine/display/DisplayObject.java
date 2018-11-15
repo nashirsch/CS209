@@ -43,6 +43,14 @@ public class DisplayObject {
 
 	private double scaleY;
 
+	private boolean physical;
+
+	private float gravity;
+
+	private float xMomentum;
+
+	private float yMomentum;
+
 	/**
 	 * Constructors: can pass in the id OR the id and image's file path and
 	 * position OR the id and a buffered image and position
@@ -60,6 +68,10 @@ public class DisplayObject {
 		this.parent = null;
 		this.hitbox = new Rectangle(0, 0, 1, 1);
 		this.transform = new AffineTransform();
+		this.physical = false;
+		this.gravity = 0.0f;
+		this.yMomentum = 0.0f;
+		this.xMomentum = 0.0f;
 	}
 
 	public DisplayObject(String id) {
@@ -75,6 +87,10 @@ public class DisplayObject {
 		this.parent = null;
 		this.hitbox = new Rectangle(0, 0, 1, 1);
 		this.transform = new AffineTransform();
+		this.physical = false;
+		this.gravity = 0.0f;
+		this.yMomentum = 0.0f;
+		this.xMomentum = 0.0f;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -91,6 +107,10 @@ public class DisplayObject {
 		this.parent = null;
 		this.hitbox = new Rectangle(0, 0, 1, 1);
 		this.transform = new AffineTransform();
+		this.physical = false;
+		this.gravity = 0.0f;
+		this.yMomentum = 0.0f;
+		this.xMomentum = 0.0f;
 	}
 
 	public void setId(String id) {
@@ -131,14 +151,6 @@ public class DisplayObject {
 		this.alpha = alpha;
 	}
 
-	public float getOldAlpha() {
-		return oldAlpha;
-	}
-
-	public void setOldAlpha(float oldAlpha) {
-		this.oldAlpha = oldAlpha;
-	}
-
 	public double getScaleX() {
 		return scaleX;
 	}
@@ -154,6 +166,22 @@ public class DisplayObject {
 	public void setScaleY(double scaleY) {
 		this.scaleY = scaleY;
 	}
+
+	public boolean isPhysical() { return physical; }
+
+	public void setPhysical(boolean physical) { this.physical = physical; }
+
+	public float getGravity() { return gravity; }
+
+	public void setGravity(float gravity) { this.gravity = gravity; }
+
+	public float getxMomentum() { return xMomentum; }
+
+	public void setxMomentum(float xMomentum) { this.xMomentum = xMomentum; }
+
+	public float getyMomentum() { return yMomentum; }
+
+	public void setyMomentum(float yMomentum) { this.yMomentum = yMomentum; }
 
 	/**
 	 * Returns the unscaled width and height of this display object
@@ -244,6 +272,21 @@ public class DisplayObject {
 		this.transform.scale(this.scaleX, this.scaleY);
 		this.hitbox = new Rectangle(0, 0, this.getUnscaledWidth(), this.getUnscaledHeight());
 		this.hitbox = this.transform.createTransformedShape(this.hitbox);
+
+		if(this.physical == true){
+			this.yMomentum += this.gravity;
+
+			if(this.id == "obstacle"){
+				System.out.println(this.xMomentum + " " + this.yMomentum);
+			}
+
+			if(this.yMomentum > 8){ this.yMomentum = 8; }
+			else if(this.yMomentum < -8){ this.yMomentum = -8; }
+			if(this.xMomentum > 8){ this.xMomentum = 8; }
+			else if(this.xMomentum < -8){ this.xMomentum = -8; }
+
+			this.setPosition(new Point(this.getPosition().x + (int)this.xMomentum, this.getPosition().y + (int)this.yMomentum));
+		}
 	}
 
 	/**

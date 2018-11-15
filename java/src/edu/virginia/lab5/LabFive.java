@@ -1,4 +1,4 @@
-package edu.virginia.lab4;
+package edu.virginia.lab5;
 
 import edu.virginia.engine.display.AnimatedSprite;
 import edu.virginia.engine.display.DisplayObject;
@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 
-public class LabFour extends Game {
+public class LabFive extends Game {
 
     private AnimatedSprite mario = new AnimatedSprite("mario", new Point(650, 200));
 
@@ -27,16 +27,21 @@ public class LabFour extends Game {
 
     private String score = "100";
 
+    private float gravity = 0.25f;
 
-    public LabFour()  {
+    public LabFive()  {
         super("Lab Four", 1400, 1000);
 
         mario.setScaleX(0.6);
         mario.setScaleY(0.6);
+        mario.setPhysical(true);
+        mario.setGravity(gravity);
 
         obstacle.setScaleX(0.4);
         obstacle.setScaleY(0.4);
         obstacle.setPosition(new Point(1100, 700));
+        obstacle.setPhysical(true);
+        obstacle.setGravity(0.0f);
 
         goal.setScaleY(0.4);
         goal.setScaleX(0.4);
@@ -75,19 +80,19 @@ public class LabFour extends Game {
 
         /* Arrow key movements (U, D, L, R) for Mario */
         if (pressedKeys.contains(KeyEvent.VK_UP)){
-            mario.setPosition(new Point(mario.getPosition().x, mario.getPosition().y - 8));
+            mario.setyMomentum(mario.getyMomentum() - 0.5f);
             currentAnimation = "up";
         }
         if (pressedKeys.contains(KeyEvent.VK_DOWN)){
-            mario.setPosition(new Point(mario.getPosition().x, mario.getPosition().y + 8));
+            mario.setyMomentum(mario.getyMomentum() + 0.5f);
             currentAnimation = "down";
         }
         if (pressedKeys.contains(KeyEvent.VK_LEFT)){
-            mario.setPosition(new Point(mario.getPosition().x - 8, mario.getPosition().y));
+            mario.setxMomentum(mario.getxMomentum() - 0.5f);
             currentAnimation = "left";
         }
         if (pressedKeys.contains(KeyEvent.VK_RIGHT)){
-            mario.setPosition(new Point(mario.getPosition().x + 8, mario.getPosition().y));
+            mario.setxMomentum(mario.getxMomentum() + 0.5f);
             currentAnimation = "right";
         }
 
@@ -158,6 +163,14 @@ public class LabFour extends Game {
                 sounds.PlaySoundEffect("doh");
                 fxClock.resetGameClock();
 
+                float xMomentum = mario.getxMomentum() + obstacle.getxMomentum();
+                float yMomentum = mario.getyMomentum() + obstacle.getyMomentum();
+
+                mario.setxMomentum(xMomentum * -2.0f);
+                obstacle.setxMomentum(xMomentum / 2.0f);
+                mario.setyMomentum(yMomentum * -2.0f);
+                obstacle.setyMomentum(yMomentum / 2.0f);
+
                 if(Integer.parseInt(this.score) > 0){ this.score = String.valueOf(Integer.parseInt(this.score) - 10); }
             }
         }
@@ -193,7 +206,7 @@ public class LabFour extends Game {
      * that calls update() and draw() every frame
      * */
     public static void main(String[] args) {
-        LabFour game = new LabFour();
+        LabFive game = new LabFive();
         game.start();
     }
 }
